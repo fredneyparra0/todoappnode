@@ -32,21 +32,19 @@
 
 <div id="listItems" class="items-list-all">
     <div id="container-item-solo">
-        <% if (task.check === true) { %>
-            <%= 
-                document.querySelector('.agregar__link').classList.add('agregar__link--decoration');
-                
-            %> 
-        <% } %>
             <% task.forEach(element => { %>
               <div class="item">
                   <div class="agregar__container">
                       <label class="agregar__checkbox">
-                      <input class="agregar__input" type="checkbox">
+                      <input class="agregar__input" type="checkbox" <% if (element.check) { %>
+                        <%% checked = true %> 
+                      <% } %>
                       <span class="agregar__span"></span>
                       </input>
                       </label>
-                      <a class="agregar__link" href="#"><%= element.titulo %> </a>
+                      <a class="agregar__link <% if (element.check) { %>
+                        <%= 'agregar__link--decoration' %>  
+                      <% } %>  " href="#"><%= element.titulo %> </a>
                   </div>
                   <a class="agregar__link-icon" href="#">
                       <img class="agregar__icon" src="images/icon-cross.svg" alt="clear">
@@ -83,10 +81,9 @@
     </div>
   </div>
 
-
   <script src="js/constants.js"></script>
-  <script src="js/index.js"></script>
   <script src="js/agregar.js"></script>
+  <script src="js/index.js"></script>
 </div>
 </body>
 </html>
