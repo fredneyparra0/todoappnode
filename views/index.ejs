@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+  <link rel="stylesheet" href="css/main.css">
+  <title>Frontend Mentor | Todo app</title>
+</head>
+<body>
+  <div class="container"> 
+
+    <div class="title"> 
+      <span class="title__span">TODO</span>
+      <img class="title__img" src="images/icon-sun.svg" alt="color-theme">
+    </div>
+
+    <div class="agregar">
+      <div class="agregar__container size">
+        <label class="agregar__checkbox lineal checkbox--square">
+          <input class="agregar__input--first" type="checkbox" id="checkbox-agregar">
+          <span class="agregar__span"></span>
+        </label>
+        <form class="agregar__formulario" id="formularioAgregar">
+          <input class="agregar__input-text" placeholder="Insert text new item" type="text" id="inputAgregar">
+        </form>
+    </div>  
+</a>
+</div>
+
+<div id="listItems" class="items-list-all">
+    <div id="container-item-solo">
+        <% if (task.check === true) { %>
+            <%= 
+                document.querySelector('.agregar__link').classList.add('agregar__link--decoration');
+                
+            %> 
+        <% } %>
+            <% task.forEach(element => { %>
+              <div class="item">
+                  <div class="agregar__container">
+                      <label class="agregar__checkbox">
+                      <input class="agregar__input" type="checkbox">
+                      <span class="agregar__span"></span>
+                      </input>
+                      </label>
+                      <a class="agregar__link" href="#"><%= element.titulo %> </a>
+                  </div>
+                  <a class="agregar__link-icon" href="#">
+                      <img class="agregar__icon" src="images/icon-cross.svg" alt="clear">
+                  </a>
+              </div>
+            <% }) %>
+        
+      </div>
+      <div class="item actions">
+        <div class="container-list">
+            <span id="itemsRestantes" class="item-font">5 items left</span>
+        </div>
+        <div class="container-list show">
+            <span class="item-font action-filter-all blue">All</span>
+            <span class="item-font action-filter-active">Active</span>
+            <span class="item-font action-filter-completed">Completed</span>
+        </div>
+        <div class="container-list">
+            <span id="clearAll" class="item-font">Clear Completed</span>
+        </div>
+      </div>
+      <div class="item actions esconder">
+        <div class="container-list">
+          <span class="item-font action-filter-all blue">All</span>
+          <span class="item-font action-filter-active">Active</span>
+          <span class="item-font action-filter-completed">Completed</span>
+        </div>
+      </div>
+    </div>
+    <div class="title-final">
+      <p class="title-final__parrafo">
+        Drag and drop to reader list
+      </p>
+    </div>
+  </div>
+
+
+  <script src="js/constants.js"></script>
+  <script src="js/index.js"></script>
+  <script src="js/agregar.js"></script>
+</div>
+</body>
+</html>
