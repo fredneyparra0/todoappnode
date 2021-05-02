@@ -32,25 +32,8 @@
 
 <div id="listItems" class="items-list-all">
     <div id="container-item-solo">
-            <% task.forEach(element => { %>
-              <div class="item">
-                  <div class="agregar__container">
-                      <label class="agregar__checkbox">
-                      <input class="agregar__input" type="checkbox" <% if (element.check) { %>
-                        <%% checked = true %> 
-                      <% } %>
-                      <span class="agregar__span"></span>
-                      </input>
-                      </label>
-                      <a class="agregar__link <% if (element.check) { %>
-                        <%= 'agregar__link--decoration' %>  
-                      <% } %>  " href="#"><%= element.titulo %> </a>
-                  </div>
-                  <a class="agregar__link-icon" href="#">
-                      <img class="agregar__icon" src="images/icon-cross.svg" alt="clear">
-                  </a>
-              </div>
-            <% }) %>
+
+      
         
       </div>
       <div class="item actions">
@@ -78,6 +61,7 @@
       <p class="title-final__parrafo">
         Drag and drop to reader list
       </p>
+      <span class="clicksip">click</span>
     </div>
   </div>
 

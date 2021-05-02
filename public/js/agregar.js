@@ -5,7 +5,7 @@ const// Variables
   checkFirst = document.querySelector('.agregar__input--first'),
   clearAll = document.querySelector('span#clearAll'),
   itemsRestantes = document.querySelector('#itemsRestantes');
-  
+
 // Agregar elemento desde input
 formularioAgregar.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -21,6 +21,7 @@ formularioAgregar.addEventListener('submit', (e) => {
 // Agregar elementos que se encuentran el localStorage
 const cargaRapida = () => {
   document.addEventListener('DOMContentLoaded', () => {
+    getTaskDataBase();
     const itemsLS = recibirValoresLocalStorage();
     const fragmentNewItems = document.createDocumentFragment();
     itemsLS.forEach((element) => {
@@ -33,6 +34,23 @@ const cargaRapida = () => {
   });
 }
 cargaRapida();
+
+async function getTaskDataBase () {
+  const request = new XMLHttpRequest();
+  request.open("GET", "http://localhost:3000/taskget");
+  request.send();
+
+  request.addEventListener('readystatechange', () => {
+    if (request.readyState === 4) {
+      const jsonParse = JSON.parse(request.response);
+      jsonParse.forEach(element => {
+        itemList.appendChild(crearNuevaTareaDOM(element.titulo));
+        // console.log(element.titulo)
+      })
+      // console.log(jsonParse)
+    }
+  })
+}
 
 clearAll.addEventListener('click', function () {
   const todosElementos = document.querySelectorAll('#container-item-solo .item .agregar__input:checked');
@@ -50,9 +68,9 @@ const crearNuevaTareaDOM = function (nuevaTarea) {
   const itemElement = document.createElement('div');
   itemElement.className = 'item';
   itemElement.innerHTML = getHTMLStringForNewItem(nuevaTarea.titulo);
-  
+
   const { itemTextElement, checkElement, deleteElement, filterActived } = getVariablesForNewItem(itemElement);
-  
+
   if (nuevaTarea.check) {
     itemTextElement.classList.add('agregar__link--decoration');
     checkElement.setAttribute('checked', true);
@@ -61,7 +79,7 @@ const crearNuevaTareaDOM = function (nuevaTarea) {
     filterActived === "Completed" && itemElement.classList.add("hidden");
   }
 
-  loadEventsForNewItem({deleteElement, itemElement, nuevaTarea, checkElement, itemTextElement});
+  // loadEventsForNewItem({ deleteElement, itemElement, nuevaTarea, checkElement, itemTextElement });
 
   return itemElement;
 }
@@ -71,14 +89,20 @@ function getVariablesForNewItem(itemElement) {
     itemTextElement: itemElement.querySelector('.agregar__link'),
     checkElement: itemElement.querySelector('.agregar__input'),
     deleteElement: itemElement.querySelector('.agregar__link-icon'),
-    filterActived: document.querySelector(".item.actions [class*=action-filter].blue").textContent
+    filterActived: document.querySelector(".item.actions [class*=action-filter].blue").textContent,
+
+
+    // itemTextElement: document.querySelector('.agregar__link'),
+    // checkElement: document.querySelector('.agregar__input'),
+    // deleteElement: document.querySelector('.agregar__link--icon'),
+    // filterActived: document.querySelector('.item.actions [class*=action-filter].blue')
   };
 }
 
-function loadEventsForNewItem(data) {
-  data.deleteElement.addEventListener('click', eliminarElementoDomLs(data.itemElement, data.nuevaTarea.id));
-  data.checkElement.addEventListener('click', manejarCheckEnTareasAgregadas(data.itemTextElement, data.nuevaTarea.id));
-}
+// function loadEventsForNewItem(data) {
+//   data.deleteElement.addEventListener('click', eliminarElementoDomLs(data.itemElement, data.nuevaTarea.id));
+//   data.checkElement.addEventListener('click', manejarCheckEnTareasAgregadas(data.itemTextElement, data.nuevaTarea.id));
+// }
 
 function getHTMLStringForNewItem(titulo) {
   return `
@@ -96,7 +120,7 @@ function getHTMLStringForNewItem(titulo) {
   `;
 }
 
-function eliminarElementoDomLs (elementoDiv, id) {
+function eliminarElementoDomLs(elementoDiv, id) {
   return function () {
     elementoDiv.remove();
     eliminarTareaLs([id]);
@@ -150,35 +174,35 @@ const recibirValoresLocalStorage = () => {
 
 function generateUUID() {
   let dt = new Date().getTime();
-  const uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(character) {
+  const uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (character) {
     const r = (dt + Math.random() * 16) % 16 | 0;
-    dt = Math.floor(dt/16);
+    dt = Math.floor(dt / 16);
     return (character == "x" ? r : (r & 0x3 | 0x8)).toString(16);
   });
   return uuid;
 }
 
-function pruebaContador () {
+function pruebaContador() {
   const valoresDelLocalStorage = recibirValoresLocalStorage().length;
-    itemsRestantes.textContent = `${valoresDelLocalStorage} items left`;
+  itemsRestantes.textContent = `${valoresDelLocalStorage} items left`;
 }
 
 document.querySelectorAll('div.container-list span.item-font[class*=action-filter]').forEach(actionElement => {
-  actionElement.addEventListener('click', function() {
+  actionElement.addEventListener('click', function () {
     document.querySelectorAll(".item.actions [class*=action-filter].blue").forEach(element => element.classList.remove("blue"));
     switch (this.textContent) {
       case "All":
         filterAllItemsToShowDOM();
         break;
-      
+
       case "Completed":
         filterCompletedItemsToShowDOM();
         break;
-      
+
       case "Active":
         filterActiveItemsToShowDOM();
         break;
-    
+
       default:
         filterAllItemsToShowDOM();
         break;
@@ -212,3 +236,49 @@ function filterCompletedItemsToShowDOM() {
   });
   document.querySelectorAll(".item.actions .action-filter-completed").forEach(element => element.classList.add("blue"));
 }
+
+const clicksip = document.querySelector('.clicksip');
+console.log(clicksip)
+
+clicksip.addEventListener('click', function postdatabase () {
+  const xhr = new XMLHttpRequest;
+
+  xhr.onload = function () {
+    const serverResponse = document.querySelector('.title-final__parrafo')
+    serverResponse.innerHTML = this.responseText;
+  }
+
+  xhr.open('POST', "http://localhost:3000/taskget");
+  xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  xhr.send(JSON.stringify({name: "fredney", age:21}));
+});
+
+/**
+ * save new task in database
+ *
+ */
+// function postdatabase () {
+//   const xhr = new XMLHttpRequest;
+
+//   xhr.onload = function () {
+//     const serverResponse = document.querySelector('.title-final__parrafo')
+//     serverResponse.innerHTML = this.responseText;
+//   }
+
+//   xhr.open('POST', "http://localhost:3000/taskget");
+//   xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+//   xhr.send("name=domenic&message= how`s its going");
+// }
+// postdatabase()
+  
+// async function saveNewTaskDB (taskObject) {
+//     const object = {
+//       "name": "ney",
+//       "age": "21",
+//       "country": "venezuela"
+//     }
+
+
+// }
+
+// saveNewTaskDB()
