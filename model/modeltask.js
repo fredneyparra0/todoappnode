@@ -1,9 +1,8 @@
 const mongoose = require('mongoose');
 
 const schemaTask = new mongoose.Schema({
-    check: Boolean,
-    id: Number,
-    titulo: String
+    titulo: String,
+    check: Boolean
 })
 
 const modelTask = mongoose.model('tasks', schemaTask);

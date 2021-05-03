@@ -1,31 +1,52 @@
 const express = require('express');
 const router = express.Router();
+const bodyParser = require('body-parser'); 
+const mongoose = require('mongoose');
+
+router.use(bodyParser.urlencoded({ extended: false }));
+router.use(bodyParser.json());
+
 const tasks = require('../model/modeltask');
 
-
 router.get('/', async (req, res) => {
-    // const task = await tasks.find();
-    
-    // res.render('index',{task: task});
-    
-    res.render('index');
-    
-    
+    const listTasks = await tasks.find();
+    res.render('index',{task: listTasks});
 })
 
-// router.get('/taskget', async (req, res) => {
-//     const taskJson = await tasks.find();
-//     res.json(taskJson);
-// })
-
-router.post('/taskget', (req, res) => {
-    const params = req.params;
-    console.log(params);
-    res.send('yeahh starting')
+router.post('/taskget', async (req, res) => {
+    const body = req.body;
+    console.log(body)
+    try {
+        const taskSave = new tasks(body)
+        await taskSave.save()
+        res.redirect('/');
+    } catch (error) {
+        console.log('error', error)
+    }
 });
 
-// router.post('/', async (req, res) => {
+router.get('/updatetask/:id', async (req, res) => {
+    const id = req.params.id;
+    try {
+        const compareTask = await tasks.findOne({_id : id})
+        compareTask.check ? compareTask.check = false : compareTask.check = true; 
+        const mascotaDB = await tasks.findByIdAndUpdate(
+            id, compareTask, { useFindAndModify: false }
+        )
+        res.redirect('/')
+    } catch (error) {
+        console.log(error)
+    }
+});
 
-// });
+router.get('/deletetask/:id', async (req, res) => {
+    const id = req.params.id;
+    try {
+        const TaskDelete = await tasks.findByIdAndDelete({ _id: id });
+        res.redirect('/');
+    } catch (error) {
+        console.log(error)
+    }
+});
 
 module.exports = router;

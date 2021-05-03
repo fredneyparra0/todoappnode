@@ -137,6 +137,13 @@ body.theme-light .items-list-all {
     cursor: pointer;
 }
 
+.agregar__link--change {
+    position: absolute;
+    z-index: 100;
+    height: 30px;
+    width: 30px;
+}
+
 .agregar__formulario {
     width: 100%;
     margin: 0 0 0 15px;

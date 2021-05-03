@@ -2,54 +2,102 @@ const// Variables
   input = document.getElementById('inputAgregar'),
   formularioAgregar = document.getElementById('formularioAgregar'),
   itemList = document.getElementById('container-item-solo'),
-  checkFirst = document.querySelector('.agregar__input--first'),
   clearAll = document.querySelector('span#clearAll'),
   itemsRestantes = document.querySelector('#itemsRestantes');
-
-// Agregar elemento desde input
-formularioAgregar.addEventListener('submit', (e) => {
-  e.preventDefault();
+  
+  // Agregar elemento desde input
+  formularioAgregar.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const checkFirst = document.querySelector('.agregar__input--first');
   const nuevaTarea = {
-    id: generateUUID(),
     titulo: input.value,
     check: checkFirst.checked
   };
-  itemList.appendChild(crearNuevaTareaDOM(nuevaTarea));
-  guardarTareaLocalStorage(nuevaTarea);
+  // console.log(checkFirst.checked)
+  getTaskDataBase(nuevaTarea);
+  // showCheckOrNot(checkFirst.checked);
+  // itemList.appendChild(crearNuevaTareaDOM(nuevaTarea));
+  // guardarTareaLocalStorage(nuevaTarea);
+
   input.value = '';
 });
 // Agregar elementos que se encuentran el localStorage
 const cargaRapida = () => {
   document.addEventListener('DOMContentLoaded', () => {
-    getTaskDataBase();
-    const itemsLS = recibirValoresLocalStorage();
-    const fragmentNewItems = document.createDocumentFragment();
-    itemsLS.forEach((element) => {
-      const divFuncion = crearNuevaTareaDOM(element);
-      fragmentNewItems.appendChild(divFuncion);
-    });
-    itemList.appendChild(fragmentNewItems);
-    pruebaContador()
+    // const itemsLS = recibirValoresLocalStorage();
+    // const fragmentNewItems = document.createDocumentFragment();
+    // itemsLS.forEach((element) => {
+    //   const divFuncion = crearNuevaTareaDOM(element);
+    //   fragmentNewItems.appendChild(divFuncion);
+    // });
+    // itemList.appendChild(fragmentNewItems);
+    // pruebaContador()
     // eliminarElementoDomLs()
   });
 }
 cargaRapida();
 
-async function getTaskDataBase () {
-  const request = new XMLHttpRequest();
-  request.open("GET", "http://localhost:3000/taskget");
-  request.send();
+function showCheckOrNot (check) {
+  const itemCheck = document.querySelector('.agregar__link');
+  const elementCheck = document.querySelector('.agregar__input');
+  console.log(itemCheck)
+  console.log(elementCheck)
 
-  request.addEventListener('readystatechange', () => {
-    if (request.readyState === 4) {
-      const jsonParse = JSON.parse(request.response);
-      jsonParse.forEach(element => {
-        itemList.appendChild(crearNuevaTareaDOM(element.titulo));
-        // console.log(element.titulo)
-      })
-      // console.log(jsonParse)
+  // if (check === true) {
+    itemCheck.classList.add('agregar__link--decoration');
+    elementCheck.setAttribute('checked', true);
+  // }
+}
+
+const linkUpdate = document.querySelector('.agregar__link--change');
+if (linkUpdate === null) {} else {
+  linkUpdate.addEventListener('click', () => {
+    /**
+     * actualizar tarea terminada o no
+     */
+    function updateTask () {
+      
+      const xhr = new XMLHttpRequest();
+      xhr.onload = () => {
+          if (xhr.status >= 200 && xhr.status < 300) {
+          }
+      };
+      xhr.open('POST', 'http://localhost:3000/taskget');
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.send(JSON.stringify(json));
+    
     }
+  
   })
+}
+
+
+// const btnDeleteTask = document.querySelectorAll('.agregar__link-icon');
+
+// btnDeleteTask.addEventListener('click', () => {
+//   const xhr = new XMLHttpRequest();
+//   xhr.open('POST', '');
+// });
+
+
+/**
+ *  metodo post para enviar nuevas tareas
+ * 
+ */
+function getTaskDataBase (json) {
+  const xhr = new XMLHttpRequest();
+  // listen for `load` event
+  xhr.onload = () => {
+      // print JSON response
+      if (xhr.status >= 200 && xhr.status < 300) {
+      }
+  };
+  // open request
+  xhr.open('POST', 'http://localhost:3000/taskget');
+  // set `Content-Type` header
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  // send rquest with JSON payload
+  xhr.send(JSON.stringify(json));
 }
 
 clearAll.addEventListener('click', function () {
@@ -86,16 +134,16 @@ const crearNuevaTareaDOM = function (nuevaTarea) {
 
 function getVariablesForNewItem(itemElement) {
   return {
-    itemTextElement: itemElement.querySelector('.agregar__link'),
-    checkElement: itemElement.querySelector('.agregar__input'),
-    deleteElement: itemElement.querySelector('.agregar__link-icon'),
-    filterActived: document.querySelector(".item.actions [class*=action-filter].blue").textContent,
+    // itemTextElement: itemElement.querySelector('.agregar__link'),
+    // checkElement: itemElement.querySelector('.agregar__input'),
+    // deleteElement: itemElement.querySelector('.agregar__link-icon'),
+    // filterActived: document.querySelector(".item.actions [class*=action-filter].blue").textContent,
 
 
-    // itemTextElement: document.querySelector('.agregar__link'),
-    // checkElement: document.querySelector('.agregar__input'),
-    // deleteElement: document.querySelector('.agregar__link--icon'),
-    // filterActived: document.querySelector('.item.actions [class*=action-filter].blue')
+    itemTextElement: document.querySelector('.agregar__link'),
+    checkElement: document.querySelector('.agregar__input'),
+    deleteElement: document.querySelector('.agregar__link--icon'),
+    filterActived: document.querySelector('.item.actions [class*=action-filter].blue')
   };
 }
 
@@ -120,12 +168,12 @@ function getHTMLStringForNewItem(titulo) {
   `;
 }
 
-function eliminarElementoDomLs(elementoDiv, id) {
-  return function () {
-    elementoDiv.remove();
-    eliminarTareaLs([id]);
-  }
-}
+// function eliminarElementoDomLs(elementoDiv, id) {
+//   return function () {
+//     elementoDiv.remove();
+//     eliminarTareaLs([id]);
+//   }
+// }
 
 function eliminarTareaLs(idArrays) {
   const recibirValores = recibirValoresLocalStorage();
@@ -154,38 +202,38 @@ function actualizarTareaLocalStorage(id) {
 }
 
 // Guardar objeto en array
-function guardarTareaLocalStorage(nuevaTarea) {
-  const itemsListLS = recibirValoresLocalStorage();
-  itemsListLS.push(nuevaTarea);
-  localStorage.setItem(ITEMS_PROPS_LS, JSON.stringify(itemsListLS)); // Sobreescribir LS de items
-  pruebaContador()
-}
+// function guardarTareaLocalStorage(nuevaTarea) {
+//   const itemsListLS = recibirValoresLocalStorage();
+//   itemsListLS.push(nuevaTarea);
+//   localStorage.setItem(ITEMS_PROPS_LS, JSON.stringify(itemsListLS)); // Sobreescribir LS de items
+//   pruebaContador()
+// }
 
-function guardarTareasLocalStorage(arrayTareas) {
-  localStorage.setItem(ITEMS_PROPS_LS, JSON.stringify(arrayTareas)); // Sobreescribir LS de items
-  pruebaContador()
-}
+// function guardarTareasLocalStorage(arrayTareas) {
+//   localStorage.setItem(ITEMS_PROPS_LS, JSON.stringify(arrayTareas)); // Sobreescribir LS de items
+//   pruebaContador()
+// }
 
-const recibirValoresLocalStorage = () => {
-  if (!localStorage.getItem(ITEMS_PROPS_LS)) guardarTareasLocalStorage([]);
-  const parse = JSON.parse(localStorage.getItem(ITEMS_PROPS_LS));
-  return parse;
-}
+// const recibirValoresLocalStorage = () => {
+//   if (!localStorage.getItem(ITEMS_PROPS_LS)) guardarTareasLocalStorage([]);
+//   const parse = JSON.parse(localStorage.getItem(ITEMS_PROPS_LS));
+//   return parse;
+// }
 
-function generateUUID() {
-  let dt = new Date().getTime();
-  const uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (character) {
-    const r = (dt + Math.random() * 16) % 16 | 0;
-    dt = Math.floor(dt / 16);
-    return (character == "x" ? r : (r & 0x3 | 0x8)).toString(16);
-  });
-  return uuid;
-}
+// function generateUUID() {
+//   let dt = new Date().getTime();
+//   const uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (character) {
+//     const r = (dt + Math.random() * 16) % 16 | 0;
+//     dt = Math.floor(dt / 16);
+//     return (character == "x" ? r : (r & 0x3 | 0x8)).toString(16);
+//   });
+//   return uuid;
+// }
 
-function pruebaContador() {
-  const valoresDelLocalStorage = recibirValoresLocalStorage().length;
-  itemsRestantes.textContent = `${valoresDelLocalStorage} items left`;
-}
+// function pruebaContador() {
+//   const valoresDelLocalStorage = recibirValoresLocalStorage().length;
+//   itemsRestantes.textContent = `${valoresDelLocalStorage} items left`;
+// }
 
 document.querySelectorAll('div.container-list span.item-font[class*=action-filter]').forEach(actionElement => {
   actionElement.addEventListener('click', function () {
@@ -236,49 +284,3 @@ function filterCompletedItemsToShowDOM() {
   });
   document.querySelectorAll(".item.actions .action-filter-completed").forEach(element => element.classList.add("blue"));
 }
-
-const clicksip = document.querySelector('.clicksip');
-console.log(clicksip)
-
-clicksip.addEventListener('click', function postdatabase () {
-  const xhr = new XMLHttpRequest;
-
-  xhr.onload = function () {
-    const serverResponse = document.querySelector('.title-final__parrafo')
-    serverResponse.innerHTML = this.responseText;
-  }
-
-  xhr.open('POST', "http://localhost:3000/taskget");
-  xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-  xhr.send(JSON.stringify({name: "fredney", age:21}));
-});
-
-/**
- * save new task in database
- *
- */
-// function postdatabase () {
-//   const xhr = new XMLHttpRequest;
-
-//   xhr.onload = function () {
-//     const serverResponse = document.querySelector('.title-final__parrafo')
-//     serverResponse.innerHTML = this.responseText;
-//   }
-
-//   xhr.open('POST', "http://localhost:3000/taskget");
-//   xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-//   xhr.send("name=domenic&message= how`s its going");
-// }
-// postdatabase()
-  
-// async function saveNewTaskDB (taskObject) {
-//     const object = {
-//       "name": "ney",
-//       "age": "21",
-//       "country": "venezuela"
-//     }
-
-
-// }
-
-// saveNewTaskDB()
