@@ -7,13 +7,11 @@ const// Variables
   
   // Agregar elemento desde input
   formularioAgregar.addEventListener('submit', (e) => {
-    e.preventDefault();
     const checkFirst = document.querySelector('.agregar__input--first');
   const nuevaTarea = {
     titulo: input.value,
     check: checkFirst.checked
   };
-  // console.log(checkFirst.checked)
   getTaskDataBase(nuevaTarea);
   // showCheckOrNot(checkFirst.checked);
   // itemList.appendChild(crearNuevaTareaDOM(nuevaTarea));
@@ -87,11 +85,12 @@ if (linkUpdate === null) {} else {
 function getTaskDataBase (json) {
   const xhr = new XMLHttpRequest();
   // listen for `load` event
-  xhr.onload = () => {
-      // print JSON response
-      if (xhr.status >= 200 && xhr.status < 300) {
-      }
-  };
+  // xhr.onload = () => {
+  //     // print JSON response
+  //     // if (xhr.status >= 200 && xhr.status < 300) {
+  //     //   // console.log(JSON.parse(xhr.responseText))
+  //     // }
+  // };
   // open request
   xhr.open('POST', 'http://localhost:3000/taskget');
   // set `Content-Type` header

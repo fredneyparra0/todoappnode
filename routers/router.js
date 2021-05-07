@@ -15,11 +15,10 @@ router.get('/', async (req, res) => {
 
 router.post('/taskget', async (req, res) => {
     const body = req.body;
-    console.log(body)
     try {
         const taskSave = new tasks(body)
         await taskSave.save()
-        res.redirect('/');
+        res.redirect('/')
     } catch (error) {
         console.log('error', error)
     }
@@ -30,9 +29,10 @@ router.get('/updatetask/:id', async (req, res) => {
     try {
         const compareTask = await tasks.findOne({_id : id})
         compareTask.check ? compareTask.check = false : compareTask.check = true; 
-        const mascotaDB = await tasks.findByIdAndUpdate(
+        await tasks.findByIdAndUpdate(
             id, compareTask, { useFindAndModify: false }
         )
+        const findBD = await tasks.find();
         res.redirect('/')
     } catch (error) {
         console.log(error)
@@ -42,7 +42,7 @@ router.get('/updatetask/:id', async (req, res) => {
 router.get('/deletetask/:id', async (req, res) => {
     const id = req.params.id;
     try {
-        const TaskDelete = await tasks.findByIdAndDelete({ _id: id });
+        await tasks.findByIdAndDelete({ _id: id });
         res.redirect('/');
     } catch (error) {
         console.log(error)
