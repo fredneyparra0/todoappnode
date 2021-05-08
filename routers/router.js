@@ -15,17 +15,16 @@ router.get('/', async (req, res) => {
 
 router.post('/taskget', async (req, res) => {
     console.log(req.body)
-    // const { task, check } = req.body;
-    // console.log(task);
-    // console.log(check);
-    // try {
-    //     const taskSave = new tasks(body)
-    //     await taskSave.save()
-    //     res.redirect('/')
-    // } catch (error) {
-        //     console.log('error', error)
-        // }
-    res.redirect('/')
+    const body = {...req.body};
+    !body.check ? body.check = false : body.check = true;
+    console.log("body", body);
+    try {
+        const taskSave = new tasks(body)
+        await taskSave.save()
+        res.redirect('/')
+    } catch (error) {
+        console.log('error', error)
+    }
 });
 
 router.get('/updatetask/:id', async (req, res) => {
