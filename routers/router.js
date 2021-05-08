@@ -14,14 +14,18 @@ router.get('/', async (req, res) => {
 })
 
 router.post('/taskget', async (req, res) => {
-    const body = req.body;
-    try {
-        const taskSave = new tasks(body)
-        await taskSave.save()
-        res.redirect('/')
-    } catch (error) {
-        console.log('error', error)
-    }
+    console.log(req.body)
+    // const { task, check } = req.body;
+    // console.log(task);
+    // console.log(check);
+    // try {
+    //     const taskSave = new tasks(body)
+    //     await taskSave.save()
+    //     res.redirect('/')
+    // } catch (error) {
+        //     console.log('error', error)
+        // }
+    res.redirect('/')
 });
 
 router.get('/updatetask/:id', async (req, res) => {
@@ -48,5 +52,11 @@ router.get('/deletetask/:id', async (req, res) => {
         console.log(error)
     }
 });
+
+router.get('/deletecompleted', async (req, res) => {
+    const tasksCompletedBD = await tasks.deleteMany({"check" : true });
+    console.log(tasksCompletedBD)
+    res.redirect('/')
+})
 
 module.exports = router;

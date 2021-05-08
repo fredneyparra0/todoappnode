@@ -19,12 +19,12 @@
 
     <div class="agregar">
       <div class="agregar__container size">
+        <form class="agregar__formulario" id="formularioAgregar" method="POST" checked action="/taskget">
         <label class="agregar__checkbox lineal checkbox--square">
-          <input class="agregar__input--first" type="checkbox" id="checkbox-agregar">
+          <input class="agregar__input--first" type="checkbox" name="check" value="true" checked id="checkbox-agregar">
           <span class="agregar__span"></span>
         </label>
-        <form class="agregar__formulario" id="formularioAgregar">
-          <input class="agregar__input-text" placeholder="Insert text new item" type="text" id="inputAgregar">
+          <input class="agregar__input-text" placeholder="Insert text new item" type="text" name="task" id="inputAgregar">
         </form>
     </div>  
 </a>
@@ -57,7 +57,7 @@
       </div>
       <div class="item actions">
         <div class="container-list">
-            <span id="itemsRestantes" class="item-font">5 items left</span>
+            <span id="itemsRestantes" class="item-font"> <%= task.length %>  items left</span>
         </div>
         <div class="container-list show">
             <span class="item-font action-filter-all blue">All</span>

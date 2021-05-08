@@ -6,31 +6,20 @@ const// Variables
   itemsRestantes = document.querySelector('#itemsRestantes');
   
   // Agregar elemento desde input
-  formularioAgregar.addEventListener('submit', (e) => {
-    const checkFirst = document.querySelector('.agregar__input--first');
-  const nuevaTarea = {
-    titulo: input.value,
-    check: checkFirst.checked
-  };
-  getTaskDataBase(nuevaTarea);
-  // showCheckOrNot(checkFirst.checked);
-  // itemList.appendChild(crearNuevaTareaDOM(nuevaTarea));
-  // guardarTareaLocalStorage(nuevaTarea);
+formularioAgregar.addEventListener('submit', (e) => {
+    
 
-  input.value = '';
+  //   const checkFirst = document.querySelector('.agregar__input--first');
+//   // const nuevaTarea = {
+//   //   titulo: input.value,
+//   //   check: checkFirst.checked
+//   // };
+//   getTaskDataBase(nuevaTarea);
+//   input.value = '';
 });
 // Agregar elementos que se encuentran el localStorage
 const cargaRapida = () => {
   document.addEventListener('DOMContentLoaded', () => {
-    // const itemsLS = recibirValoresLocalStorage();
-    // const fragmentNewItems = document.createDocumentFragment();
-    // itemsLS.forEach((element) => {
-    //   const divFuncion = crearNuevaTareaDOM(element);
-    //   fragmentNewItems.appendChild(divFuncion);
-    // });
-    // itemList.appendChild(fragmentNewItems);
-    // pruebaContador()
-    // eliminarElementoDomLs()
   });
 }
 cargaRapida();
@@ -84,30 +73,19 @@ if (linkUpdate === null) {} else {
  */
 function getTaskDataBase (json) {
   const xhr = new XMLHttpRequest();
-  // listen for `load` event
-  // xhr.onload = () => {
-  //     // print JSON response
-  //     // if (xhr.status >= 200 && xhr.status < 300) {
-  //     //   // console.log(JSON.parse(xhr.responseText))
-  //     // }
-  // };
-  // open request
   xhr.open('POST', 'http://localhost:3000/taskget');
-  // set `Content-Type` header
   xhr.setRequestHeader('Content-Type', 'application/json');
-  // send rquest with JSON payload
   xhr.send(JSON.stringify(json));
 }
 
 clearAll.addEventListener('click', function () {
-  const todosElementos = document.querySelectorAll('#container-item-solo .item .agregar__input:checked');
-  todosElementos.forEach(element => element.closest('.item').remove());
-  const valoresDeLs = recibirValoresLocalStorage();
-  const filtroArray = valoresDeLs.filter(tareasGuardar => tareasGuardar.check !== true);
-  guardarTareasLocalStorage(filtroArray);
-  console.log(filtroArray);
-  // valoresDeLs.find(element => /*element.id === todosElementos*/ console.log(element.id) )
-  // console.log(todosElementos);
+  // const xhr = new XMLHttpRequest();
+  
+  // xhr.open('GET', 'http://localhost:3000/deletecompleted');
+  // xhr.send();
+
+  window.location.href = '/deletecompleted';
+
 });
 
 //Crear Elemento HTML
